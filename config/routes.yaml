@@ -1,0 +1,9 @@
+#index:
+#    path: /
+#    methods: GET|HEAD
+#    controller: App\Controller\JokerController::index
+
+#joking:
+#    path: /joking
+#    methods: POST
+#    controller: App\Controller\JokerController::joking

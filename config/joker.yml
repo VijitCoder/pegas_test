@@ -1,0 +1,8 @@
+services:
+#    ApiClient:
+#        class: GuzzleHttp\Client
+#        arguments: [[base_uri: 'http://api.icndb.com/']]
+#
+#    JokeProvider:
+#        class: App\Service\JokeProvider
+#        arguments: ['@ApiClient', '@logger']

@@ -1,0 +1,11 @@
+<FilesMatch "^\.ht">
+    deny from all
+</FilesMatch>
+
+RewriteEngine On
+RewriteBase /
+
+# Классическая верия, а не улучшенная, т.к. в текущем каталоге практически все - статика. Улучшение не дает особой выгоды
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ index.php [L,QSA]
