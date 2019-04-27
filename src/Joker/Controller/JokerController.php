@@ -3,7 +3,7 @@ namespace App\Joker\Controller;
 
 use App\Joker\Exception\APIException;
 use App\Joker\Form\SendJokeType;
-use App\Joker\Service\CategoryCachedProvider;
+use App\Joker\APIClient\CategoryCachedProvider;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;

@@ -1,5 +1,5 @@
 <?php
-namespace App\Joker\Service;
+namespace App\Joker\APIClient;
 
 use App\Joker\Exception\APIException;
 

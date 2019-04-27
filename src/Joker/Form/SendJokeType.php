@@ -2,7 +2,7 @@
 namespace App\Joker\Form;
 
 use App\Joker\Exception\APIException;
-use App\Joker\Service\CategoryProvider;
+use App\Joker\APIClient\CategoryProvider;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
