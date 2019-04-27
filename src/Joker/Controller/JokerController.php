@@ -1,5 +1,5 @@
 <?php
-namespace App\Controller;
+namespace App\Joker\Controller;
 
 use App\Joker\Exception\APIException;
 use App\Joker\Service\CategoryCachedProvider;
