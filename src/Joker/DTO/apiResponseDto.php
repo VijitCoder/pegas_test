@@ -6,7 +6,7 @@ use App\Root\Dto\Dto;
 /**
  * Parsed response from joke external API
  */
-class responseDto extends DTO
+class apiResponseDto extends DTO
 {
     /**
      * HTTP status code
