@@ -4,6 +4,10 @@ use Symfony\Component\Dotenv\Dotenv;
 
 require dirname(__DIR__).'/vendor/autoload.php';
 
+// THE CRUTCH! Symfony has no a normal way to get the project root path, only via Kernel
+// injection to the constructor of class! Jesus!
+define('SF_ROOT_PATH', realpath(__DIR__ . '/../') . '/');
+
 // Load cached env vars if the .env.local.php file exists
 // Run "composer dump-env prod" to create it (requires symfony/flex >=1.2)
 if (is_array($env = @include dirname(__DIR__).'/.env.local.php')) {

@@ -1,3 +1,20 @@
 swiftmailer:
     url: '%env(MAILER_URL)%'
     spool: { type: 'memory' }
+
+# The real mail setup
+# @link https://stackoverflow.com/a/49137663/5497749
+
+#    transport:        gmail
+#    username:         ****@gmail.com
+#    password:         *******
+#    host:             localhost
+#    port:             465
+#    encryption:       ssl
+#    auth-mode:        login
+#    spool: { type: 'memory' }
+#    stream_options:
+#        ssl:
+#            allow_self_signed: true
+#            verify_peer: false
+#            verify_peer_name: false

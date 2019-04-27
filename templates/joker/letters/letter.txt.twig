@@ -1,0 +1,11 @@
+{#
+Letter with a random joke (plain text version)
+
+@var App\Joker\DTO\JokeDto $joke
+#}
+
+Check it out! A random stupid joke!
+
+{{ joke.joke }}
+
+Categories: <small>Categories: {{ joke.categories | join(', ') }}</small>

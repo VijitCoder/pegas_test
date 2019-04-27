@@ -28,7 +28,8 @@ $(function() {
             url: $form.attr('action'),
             data: $form.serialize()
         }).done(function(data) {
-            $notifiers.success.html(data.message);
+           $notifiers.success.html('<p>' + data.message + '</p>');
+           $notifiers.success.append('<p>Joke #' + data.jokeId + ': ' + data.joke + '</p>');
         }).fail(function(data) {
             $notifiers.error.html(data.responseJSON.message);
         }).always(function() {

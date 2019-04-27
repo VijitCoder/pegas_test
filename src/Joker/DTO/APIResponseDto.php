@@ -4,7 +4,7 @@ namespace App\Joker\DTO;
 use App\Root\DTO\Dto;
 
 /**
- * Parsed response from joke external API
+ * Parsed response from the joke external API
  */
 class APIResponseDto extends Dto
 {

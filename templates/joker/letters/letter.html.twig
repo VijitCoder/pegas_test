@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+{#
+Letter with a random joke (html version)
+
+@var App\Joker\DTO\JokeDto $joke
+#}
+<html>
+<head>
+    <meta charset="utf-8">
+</head>
+<body>
+    <h3>Check it out! A random stupid joke!</h3>
+
+    <p>{{ joke.joke }}</p>
+
+    <small>Categories: {{ joke.categories | join(', ') }}</small>
+</body>
+</html>
