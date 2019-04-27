@@ -5,15 +5,14 @@ use App\Joker\Exception\APIException;
 use GuzzleHttp\Client;
 use Psr\Cache\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Cache\Adapter\AbstractAdapter;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 /**
- * Caching decorator for JokeProvider
+ * Caching decorator for category provider
  *
  * {@inheritDoc}
  */
-class JokeCachedProvider extends JokeProvider
+class CategoryCachedProvider extends CategoryProvider
 {
     /**
      * Cache timeout

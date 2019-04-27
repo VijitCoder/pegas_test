@@ -2,7 +2,7 @@
 namespace App\Controller;
 
 use App\Joker\Exception\APIException;
-use App\Joker\Service\JokeCachedProvider;
+use App\Joker\Service\CategoryCachedProvider;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -22,12 +22,12 @@ class JokerController extends AbstractController
      *
      * @Route("/", name="index", methods="GET|HEAD")
      *
-     * @param JokeCachedProvider $provider
+     * @param CategoryCachedProvider $provider
      * @return Response
      * @throws APIException
      * @throws InvalidArgumentException
      */
-    public function index(JokeCachedProvider $provider): Response
+    public function index(CategoryCachedProvider $provider): Response
     {
         return $this->render(
             'joker/index.html.twig',
