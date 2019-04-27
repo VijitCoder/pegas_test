@@ -1,7 +1,7 @@
 <?php
 namespace App\Joker\APIClient;
 
-use App\Joker\DTO\apiResponseDto;
+use App\Joker\DTO\APIResponseDto;
 use App\Joker\Exception\APIException;
 use App\Root\Exception\JsonException;
 use App\Root\Utils\JsonParser;
@@ -42,12 +42,12 @@ abstract class JokeAPIClient
      * Parse response from joke API
      *
      * @param ResponseInterface $response
-     * @return apiResponseDto
+     * @return APIResponseDto
      * @throws APIException
      */
-    protected function parseResponse(ResponseInterface $response): apiResponseDto
+    protected function parseResponse(ResponseInterface $response): APIResponseDto
     {
-        $dto = new apiResponseDto;
+        $dto = new APIResponseDto;
 
         $dto->statusCode = $response->getStatusCode();
         $dto->body = $response->getBody();
@@ -87,7 +87,7 @@ abstract class JokeAPIClient
      * @param int    $code
      * @throws APIException
      */
-    private function fail(string $message, int $code = 0): void
+    protected function fail(string $message, int $code = 0): void
     {
         $this->logger->critical($message);
         throw new APIException($message, $code);

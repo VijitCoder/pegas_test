@@ -1,5 +1,5 @@
 <?php
-namespace App\Root\Dto;
+namespace App\Root\DTO;
 
 use App\Root\Exception\DtoException;
 
@@ -17,6 +17,7 @@ class Dto
      * @param array $rawData data to populate the properties of the DTO object
      * @param bool  $strict  TRUE - exception for extra data, FALSE - just skip extra data
      * @return static
+     * @throws DtoException
      */
     public static function instantiate(array $rawData, bool $strict = true)
     {

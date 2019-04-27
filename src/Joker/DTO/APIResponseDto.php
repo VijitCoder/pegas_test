@@ -1,12 +1,12 @@
 <?php
 namespace App\Joker\DTO;
 
-use App\Root\Dto\Dto;
+use App\Root\DTO\Dto;
 
 /**
  * Parsed response from joke external API
  */
-class apiResponseDto extends DTO
+class APIResponseDto extends Dto
 {
     /**
      * HTTP status code
