@@ -3,6 +3,7 @@ namespace App\Joker\Service;
 
 use App\Joker\APIClient\JokeProvider;
 use App\Joker\DTO\JokeDto;
+use App\Joker\DTO\LetterDto;
 use App\Joker\Exception\APIException;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -67,22 +68,21 @@ class JokerService
     /**
      * Send the joke
      *
-     * @param string $email
-     * @param string $html
-     * @param string $text
+     * @param LetterDto $letter
      * @return bool
      */
-    public function send(string $email, string $html, string $text): bool
+    public function send(LetterDto $letter): bool
     {
+        $subject = 'Случайная шутка из ' . $letter->category;
         $message = (new \Swift_Message)
-            ->setSubject('Check it out!')
+            ->setSubject($subject)
             // FIXME
             // This email should be read from app configuration, but the Symfony provides
             // a truly awkward way to do that via DI. Is there a nice solution?
             ->setFrom('noreply@server.com')
-            ->setTo($email)
-            ->setBody($html, 'text/html')
-            ->addPart($text, 'text/plain');
+            ->setTo($letter->mailTo)
+            ->setBody($letter->html, 'text/html')
+            ->addPart($letter->text, 'text/plain');
 
         return (bool)$this->mailer->send($message);
     }

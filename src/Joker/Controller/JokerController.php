@@ -1,10 +1,12 @@
 <?php
 namespace App\Joker\Controller;
 
+use App\Joker\DTO\LetterDto;
 use App\Joker\Exception\APIException;
 use App\Joker\Form\SendJokeType;
 use App\Joker\APIClient\CategoryCachedProvider;
 use App\Joker\Service\JokerService;
+use App\Root\Exception\DtoException;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -48,6 +50,7 @@ class JokerController extends AbstractController
      * @param JokerService $service
      * @return JsonResponse
      * @throws APIException
+     * @throws DtoException
      */
     public function joking(Request $request, JokerService $service): JsonResponse
     {
@@ -60,15 +63,20 @@ class JokerController extends AbstractController
             return $this->json($answer, Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $joke = $service->getJoke($data['category']);
+        $mailTo = $data['email'];
+        $category = $data['category'];
+
+        $joke = $service->getJoke($category);
 
         $html = $this->renderView('joker/letters/letter.html.twig', ['joke' => $joke]);
         $text = $this->renderView('joker/letters/letter.txt.twig', ['joke' => $joke]);
 
+        $letter = LetterDto::instantiate(compact('mailTo', 'category', 'html', 'text'));
+
         $answer = [
             'jokeId' => $joke->id,
             'joke' => $joke->joke,
-            'isSent' => $service->send($data['email'], $html, $text),
+            'isSent' => $service->send($letter),
             'isStored' => $service->store($joke),
         ];
 
