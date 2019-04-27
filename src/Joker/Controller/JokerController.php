@@ -2,6 +2,7 @@
 namespace App\Joker\Controller;
 
 use App\Joker\Exception\APIException;
+use App\Joker\Form\SendJokeType;
 use App\Joker\Service\CategoryCachedProvider;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -47,12 +48,17 @@ class JokerController extends AbstractController
      */
     public function joking(Request $request): JsonResponse
     {
-        $csrfToken = $request->get('csrf_token');
-        if (!$this->isCsrfTokenValid('token', $csrfToken)) {
-            return $this->json(['message' => 'Wrong CSRF token'], Response::HTTP_BAD_REQUEST);
+        $data = $request->request->all();
+        $form = $this->createForm(SendJokeType::class);
+        $form->submit($data);
+
+        if (!$form->isValid()) {
+            $answer = ['message' => nl2br((string)$form->getErrors(true))];
+            return $this->json($answer, Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $answer = ['message' => 'stub'];
+        // $form->getData() or just $data
+        $answer = ['message' => 'good'];
 
         return $this->json($answer);
     }

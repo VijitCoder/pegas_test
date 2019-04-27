@@ -14,7 +14,10 @@
     <div class="row col-sm-6">
         <form id='joker' method='POST' action={{ path('joking') }}>
             <div class="form-group required">
-                <input name="csrf_token" type="hidden" value="{{ csrf_token('token') }}"/>
+                <input name="csrf_token"
+                    type="hidden"
+                    value="{{ csrf_token(constant('App\\Joker\\Form\\SendJokeType::CSRF_TOKEN_ID')) }}"
+                >
 
                 <label class="control-label" for="email">Email address</label>
                 <input id="email"
@@ -32,8 +35,8 @@
             <div class="form-group required">
                 <label class="control-label" for="category">Choose the category</label>
                 <select id="category" name="category" class="form-control">
-                    {% for key, category in categories %}
-                        <option value="{{ key }}">{{ category }}</option>
+                    {% for category in categories %}
+                        <option value="{{ category }}">{{ category }}</option>
                     {% endfor %}
                 </select>
             </div>
