@@ -53,7 +53,7 @@ class JsonParser
             case JSON_ERROR_STATE_MISMATCH:
                 throw new JsonException('Incorrect discharges or mismatch of modes');
             case JSON_ERROR_CTRL_CHAR:
-                throw new JsonException('Некорректный управляющий символ');
+                throw new JsonException('Invalid control character');
             case JSON_ERROR_SYNTAX:
                 throw new JsonException('Syntax error, incorrect JSON');
             case JSON_ERROR_UTF8:

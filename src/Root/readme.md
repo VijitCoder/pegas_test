@@ -1,3 +1,3 @@
-Мои дополнения в базовый набор Symfony. 
+My additions to The symfony base set.
 
-Самая широкая область использования, поэтому - "root".
+The widest area of use, therefore - "root".
