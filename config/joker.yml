@@ -1,8 +1,7 @@
 services:
-#    ApiClient:
-#        class: GuzzleHttp\Client
-#        arguments: [[base_uri: 'http://api.icndb.com/']]
-#
-#    JokeProvider:
-#        class: App\Service\JokeProvider
-#        arguments: ['@ApiClient', '@logger']
+    JokeStorageService:
+        class: App\Joker\Service\JokeStorageService
+        arguments:
+            # TODO It doesn't work. Why? I tried a few variations - all failed.
+            $storageJokesPath: "%kernel.project_dir%/storage/jokes/"
+            $storage: "@filesystem"

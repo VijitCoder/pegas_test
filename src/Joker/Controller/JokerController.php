@@ -1,11 +1,14 @@
 <?php
 namespace App\Joker\Controller;
 
-use App\Joker\DTO\LetterDto;
+use App\Joker\APIClient\JokeProvider;
+use App\Joker\DTO\SendJokeRequest;
 use App\Joker\Exception\APIException;
+use App\Joker\Exception\JokeSendException;
 use App\Joker\Form\SendJokeType;
 use App\Joker\APIClient\CategoryCachedProvider;
-use App\Joker\Service\JokerService;
+use App\Joker\Service\JokeStorageService;
+use App\Joker\Service\SendJokeService;
 use App\Root\Exception\DtoException;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -46,13 +49,22 @@ class JokerController extends AbstractController
      *
      * @Route("/joking", name="joking", methods="POST")
      *
-     * @param Request      $request
-     * @param JokerService $service
+     * @param Request            $request
+     * @param JokeProvider       $jokeProvider
+     * @param SendJokeService    $sender
+     * @param JokeStorageService $saver
      * @return JsonResponse
+     *
      * @throws APIException
      * @throws DtoException
+     * @throws JokeSendException
      */
-    public function joking(Request $request, JokerService $service): JsonResponse
+    public function joking(
+        Request $request,
+        JokeProvider $jokeProvider,
+        SendJokeService $sender,
+        JokeStorageService $saver
+    ): JsonResponse
     {
         $data = $request->request->all();
         $form = $this->createForm(SendJokeType::class);
@@ -63,21 +75,15 @@ class JokerController extends AbstractController
             return $this->json($answer, Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $mailTo = $data['email'];
-        $category = $data['category'];
+        $requestDto = SendJokeRequest::instantiate($form->getData());
 
-        $joke = $service->getJoke($category);
-
-        $html = $this->renderView('joker/letters/letter.html.twig', ['joke' => $joke]);
-        $text = $this->renderView('joker/letters/letter.txt.twig', ['joke' => $joke]);
-
-        $letter = LetterDto::instantiate(compact('mailTo', 'category', 'html', 'text'));
+        $joke = $jokeProvider->getRandomJokeOfCategory($requestDto->category);
 
         $answer = [
             'jokeId' => $joke->id,
             'joke' => $joke->joke,
-            'isSent' => $service->send($letter),
-            'isStored' => $service->store($joke),
+            'isSent' => $sender->sendJoke($requestDto, $joke),
+            'isStored' => $saver->store($joke),
         ];
 
          $answer['message'] = 'Request successfully processed.';
