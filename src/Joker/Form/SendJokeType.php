@@ -2,7 +2,8 @@
 namespace App\Joker\Form;
 
 use App\Joker\Exception\APIException;
-use App\Joker\APIClient\CategoryProvider;
+use App\Joker\APIClient\CachedAPIClient;
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -24,18 +25,18 @@ class SendJokeType extends AbstractType
     public const CSRF_TOKEN_ID = 'token';
 
     /**
-     * @var CategoryProvider
+     * @var CachedAPIClient
      */
-    private $categoryProvider;
+    private $apiClient;
 
     /**
      * Inject dependencies
      *
-     * @param CategoryProvider $categoryProvider
+     * @param CachedAPIClient $apiClient
      */
-    public function __construct(CategoryProvider $categoryProvider)
+    public function __construct(CachedAPIClient $apiClient)
     {
-        $this->categoryProvider = $categoryProvider;
+        $this->apiClient = $apiClient;
     }
 
     /**
@@ -44,10 +45,11 @@ class SendJokeType extends AbstractType
      * @param FormBuilderInterface $builder
      * @param array                $options
      * @throws APIException
+     * @throws InvalidArgumentException
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $categories = $this->categoryProvider->getCategories();
+        $categories = $this->apiClient->getCategories();
 
         $builder
             ->add('email', EmailType::class, [

@@ -12,7 +12,7 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
  *
  * {@inheritDoc}
  */
-class CategoryCachedProvider extends CategoryProvider
+class CachedAPIClient extends JokeAPIClient
 {
     /**
      * Cache timeout

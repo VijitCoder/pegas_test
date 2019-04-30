@@ -1,12 +1,12 @@
 <?php
 namespace App\Joker\Controller;
 
-use App\Joker\APIClient\JokeProvider;
+use App\Joker\APIClient\JokeAPIClient;
 use App\Joker\DTO\SendJokeRequest;
 use App\Joker\Exception\APIException;
 use App\Joker\Exception\JokeSendException;
 use App\Joker\Form\SendJokeType;
-use App\Joker\APIClient\CategoryCachedProvider;
+use App\Joker\APIClient\CachedAPIClient;
 use App\Joker\Service\JokeStorageService;
 use App\Joker\Service\SendJokeService;
 use App\Root\Exception\DtoException;
@@ -29,16 +29,16 @@ class JokerController extends AbstractController
      *
      * @Route("/", name="index", methods="GET|HEAD")
      *
-     * @param CategoryCachedProvider $provider
+     * @param CachedAPIClient $apiClient
      * @return Response
      * @throws APIException
      * @throws InvalidArgumentException
      */
-    public function index(CategoryCachedProvider $provider): Response
+    public function index(CachedAPIClient $apiClient): Response
     {
         return $this->render(
             'joker/index.html.twig',
-            ['categories' => $provider->getCategories()]
+            ['categories' => $apiClient->getCategories()]
         );
     }
 
@@ -50,7 +50,7 @@ class JokerController extends AbstractController
      * @Route("/joking", name="joking", methods="POST")
      *
      * @param Request            $request
-     * @param JokeProvider       $jokeProvider
+     * @param JokeAPIClient      $apiClient
      * @param SendJokeService    $sender
      * @param JokeStorageService $saver
      * @return JsonResponse
@@ -61,7 +61,7 @@ class JokerController extends AbstractController
      */
     public function joking(
         Request $request,
-        JokeProvider $jokeProvider,
+        JokeAPIClient $apiClient,
         SendJokeService $sender,
         JokeStorageService $saver
     ): JsonResponse
@@ -77,7 +77,7 @@ class JokerController extends AbstractController
 
         $requestDto = SendJokeRequest::instantiate($form->getData());
 
-        $joke = $jokeProvider->getRandomJokeOfCategory($requestDto->category);
+        $joke = $apiClient->getRandomJokeOfCategory($requestDto->category);
 
         $answer = [
             'jokeId' => $joke->id,

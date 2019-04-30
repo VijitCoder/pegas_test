@@ -2,7 +2,9 @@
 namespace App\Joker\APIClient;
 
 use App\Joker\DTO\APIResponseDto;
+use App\Joker\DTO\JokeDto;
 use App\Joker\Exception\APIException;
+use App\Root\Exception\DtoException;
 use App\Root\Exception\JsonException;
 use App\Root\Utils\JsonParser;
 use GuzzleHttp\Client;
@@ -12,14 +14,14 @@ use Psr\Log\LoggerInterface;
 /**
  * Client to external API with jokes service
  */
-abstract class JokeAPIClient
+class JokeAPIClient
 {
     /**
      * Guzzle HTTP client, already configured to joke API
      *
      * @var Client
      */
-    protected $client;
+    private $client;
 
     /**
      * @var LoggerInterface
@@ -39,13 +41,47 @@ abstract class JokeAPIClient
     }
 
     /**
+     * Get available jokes categories
+     *
+     * @return array
+     * @throws APIException
+     */
+    public function getCategories(): array
+    {
+        $response = $this->client->get('categories');
+        $dto = $this->parseResponse($response);
+        return (array)$dto->payload;
+    }
+
+    /**
+     * Get the random joke from specified category
+     *
+     * @param string $category
+     * @return JokeDto
+     * @throws APIException
+     */
+    public function getRandomJokeOfCategory(string $category): JokeDto
+    {
+        $response = $this->client->get("jokes/random?limitTo=[{$category}]");
+        $responseDto = $this->parseResponse($response);
+
+        try {
+            $joke = JokeDto::instantiate($responseDto->payload);
+        } catch (DtoException $e) {
+            $this->fail('Joke DTO failed to fill with an error: ' . $e->getMessage());
+        }
+
+        return $joke;
+    }
+
+    /**
      * Parse response from joke API
      *
      * @param ResponseInterface $response
      * @return APIResponseDto
      * @throws APIException
      */
-    protected function parseResponse(ResponseInterface $response): APIResponseDto
+    private function parseResponse(ResponseInterface $response): APIResponseDto
     {
         $dto = new APIResponseDto;
 
@@ -87,7 +123,7 @@ abstract class JokeAPIClient
      * @param int    $code
      * @throws APIException
      */
-    protected function fail(string $message, int $code = 0): void
+    private function fail(string $message, int $code = 0): void
     {
         $this->logger->critical($message);
         throw new APIException($message, $code);
